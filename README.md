@@ -1,3 +1,7 @@
-# hello-world
-it's for how to use github
+#include <stdlib.h>
+#include <stdio.h>
 
+int main(){
+       printf("hello world");
+return 0;
+}
