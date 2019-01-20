@@ -4,15 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-/** \brief show_panel make panel with question and commands which is gave
- *
- * \param qus char* the address of question
- * \param cmds[][50] char address of array that have command
- * \param size int the number of commands , each command have to be 50 character
- * \param takecmd char* the command that user commands
- * \return void
- *
- */
+
 void show_panel(char *qus,char cmds[][50],int size, char *takecmd){
     int num;
     int cnt;  /**< counter >*/
