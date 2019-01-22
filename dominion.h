@@ -18,7 +18,6 @@ struct gamer { /**< it's type for saving information of gamer */
     char username[80]; /**< name of gamer.it's string with 80 character*/
     char state; /**< it show whether gamer won or lose */
     int remain_probability[100]; /**< array of probability of problem */
-    /*int num_probability;*/ /**< how many problem there are.it's not matter their probability. */
     int court; /**< how much point for court gamer has */
     int people; /**< how much point for people gamer has  */
     int treasury; /**< how much point for treasury gamer has */
@@ -30,9 +29,13 @@ struct problem_node { /**< structure for making node of problem */
 };
 
 
-void prt_decision(struct decision);
-void prt_problem(struct problem);
-void show_panel(char *,char (*)[50],int, char *);
-void prepare_problem(char *, int, struct problem_node *, struct gamer);
-
+void prt_decision( struct decision);
+void prt_problem( struct problem);
+void prt_link_list( struct problem_node *);
+void prt_gamer( struct gamer);
+void print_all_string_array(char *, int, char *);
+int show_panel( char *,char (*)[50], int, char *);
+void prepare_problem( char *, int, struct problem_node **, struct gamer);
+unsigned long save_game( struct gamer);
+int load_game( char *, struct gamer *);
 #endif // DOMINION_H_INCLUDED
