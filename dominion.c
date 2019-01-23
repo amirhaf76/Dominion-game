@@ -6,13 +6,13 @@
 #include <time.h>
 #define DEBUG 1
 void prt_decision(struct decision temp){
-    printf("Approach : %s"
-           "Effect on People : %d\n"
+    printf("Approach : %s\n"
            "Effect on Court : %d\n"
-           "Effect on Treasury : %d\n",temp.approach,temp.aff_people,temp.aff_court,temp.aff_treasury);
+           "Effect on People : %d\n"
+           "Effect on Treasury : %d\n",temp.approach,temp.aff_court,temp.aff_people,temp.aff_treasury);
 }
 void prt_problem(struct problem temp){
-    printf("Problem_description : %s",temp.problem_description);
+    printf("Problem_description : %s\n",temp.problem_description);
     prt_decision(temp.one);
     prt_decision(temp.two);
     printf("Probability : %d\n",temp.probability);
@@ -20,6 +20,7 @@ void prt_problem(struct problem temp){
 }
 void prt_link_list(struct problem_node *link){
     int counter=1;
+    printf("link list :\n");
     while ( NULL != link ){
         printf("--------------------------------------- : %2d\n",counter);
         prt_problem(link->current_problem);
@@ -69,34 +70,74 @@ void print_all_string_array( char *arry, int size,char *name){
     printf("\b \n----------------------------------------------------------\n");
 }
 
-/** \brief 
+/** \brief
  *
- * \param 
- * \param 
- * \return 
+ * \param
+ * \param
+ * \return
  *
- */     
+ */
 int delete_problem_node_from_list( struct problem_node *delete_problem, struct problem_node **link_list){
-    struct problem_node *start; /**< a struct problem_node in stack for checking for first node of link list. */
+    struct problem_node start; /**< a struct problem_node is in stack for checking for first node of link list. */
     struct problem_node *temp_addr; /**< store address of next delete_problem to link previous it. */
-    
-    start->next_problem_node = *link_list; /**< add the first node of link list to next_problem of start. */
-    
-    while ( NULL == previous_problem ) { /**< work until end of link list. */
-        if ( start->next_problem_node == delete_problem ) { /**< find the delete_problem. */
-            
-            if ( start->next_problem_node == *link_list ){ /**< if delete_problem was first node , copy new address
+    struct problem_node *after_delete_problem;
+#if DEBUG
+    printf("Debug delete_problem_node_from_list =============================================================================\n");
+    printf("%d , %s\n%s\n\n",__LINE__,__func__,__FILE__);
+    int number_delete_problem = 1;
+#endif // DEBUG
+
+    start.next_problem_node = *link_list; /**< add the first node of link list to next_problem of start. */
+    temp_addr = &start;
+
+#if DEBUG
+    printf("link_list at first :-------------------------------------------------------------------\n");
+    prt_link_list(temp_addr->next_problem_node);
+    printf("%d , %s\n%s\n\n",__LINE__,__func__,__FILE__);
+#endif // DEBUG
+
+    while ( NULL != temp_addr ) { /**< work until end of link list. */
+
+        if ( temp_addr->next_problem_node == delete_problem ) { /**< find the delete_problem. */
+
+            if ( temp_addr->next_problem_node == *link_list ){ /**< if delete_problem was first node , copy new address
                 for link list. */
-                *link_list = start->next_problem_node->next_problem_node; /**< copy new address for link list. */
+
+#if DEBUG
+                printf("delete_problem was first problem node in list.!!!!!!!!!!!!!!!!!!!!!\n");
+                printf("%d , %s\n%s\n\n",__LINE__,__func__,__FILE__);
+#endif // DEBUG
+
+                *link_list = temp_addr->next_problem_node->next_problem_node; /**< copy new address for link list. */
             }
-            temp_addr = start->next_problem_node->next_problem_node; /**< keep next address of delete_problem. */
-            free(start->next_problem_node); /**< free the delete_problem. */
-            start->next_problem_node = temp_addr; /**< stick previous and next of delete_problem. */
+            after_delete_problem = temp_addr->next_problem_node->next_problem_node; /**< keep next address of delete_problem. */
+            free(temp_addr->next_problem_node); /**< free the delete_problem. */
+            temp_addr->next_problem_node = after_delete_problem; /**< stick previous and next of delete_problem. */
+
+#if DEBUG
+            printf("link_list at The END :---------------------------------------------------------------\n");
+            prt_link_list(temp_addr->next_problem_node);
+            printf("%d , %s\n%s\n",__LINE__,__func__,__FILE__);
+            printf("____________________________________________________________________________ END DEBUGING\n"
+                   "number of delete_problem = %d\n\n",number_delete_problem);
+#endif // DEBUG
+
             return 1; /**< this operation was successful. */
         }
-        start = start->next_problem_node; /**< go to next address */
+
+#if DEBUG
+        number_delete_problem++;
+#endif // DEBUG
+
+        temp_addr = temp_addr->next_problem_node; /**< go to next address */
     }
-  return 0; /**< it was not successful.!!!!! */
+#if DEBUG
+    printf("link_list at The END :---------------------------------------------------------\n");
+    prt_link_list(temp_addr);
+    printf("%d , %s\n%s\n",__LINE__,__func__,__FILE__);
+    printf("____________________________________________________________________________ END DEBUGING\n\n");
+#endif // DEBUG
+    return 0; /**< it was not successful.!!!!! */
 }
 
 /** \brief show_panel make panel with question and commands which is gave.
@@ -176,6 +217,10 @@ void gets_problem_from_file( FILE *handler, struct problem_node *host,int player
 void prepare_problem( char *addr_choice_file, int siz, struct problem_node **prepared_problem, struct gamer player ){
     struct problem_node *temp_addr=NULL; /**< temp_addr is just for keep address of prepared_problem for short time */
 
+#if DEBUG
+    printf("\n\nDEBUGING prepare_problem =======================================================================\n\n");
+#endif // DEBUG
+
     FILE *fhin; /**< file handler of input */
     fhin=fopen(addr_choice_file,"r"); /**< don't forget closing file and test it */
     if ( NULL == fhin ){ /**< testing for opening file */
@@ -187,7 +232,7 @@ void prepare_problem( char *addr_choice_file, int siz, struct problem_node **pre
     FILE *fhproblem; /**< don't forget closing file and test it */
 
     int first=0; /**< it's for making link_list.after that add node to list */
-    int counter; /**< it's for counting of problem */
+    int counter=0; /**< it's for counting of problem */
 
     for (counter = 0; counter < siz; counter++) {
 
@@ -197,14 +242,16 @@ void prepare_problem( char *addr_choice_file, int siz, struct problem_node **pre
 
 #if DEBUG
             printf("-------------------------------------------- : %2d\n",counter+1);
-            printf("enter to %d ,%s, %s, %d\n\n",counter,__FILE__,__func__,__LINE__);
+            printf("enter to %d\n",counter);
+            printf("%d , %s\n%s\n\n",__LINE__,__func__,__FILE__);
 #endif // DEBUG
 
             fscanf(fhin,"%s",buff_addr); /**< gets the address of problem */
             char main_addr[100]="problems\\"; /**< the address which has to add address of problem address */
 
 #if DEBUG
-            printf("1.buff_addr : %s , %s, %s, %d\n",main_addr,__FILE__,__func__,__LINE__);
+            printf("1.buff_addr : %s\n",buff_addr);
+            printf("%d , %s\n%s\n\n",__LINE__,__func__,__FILE__);
 #endif // DEBUG
 
 
@@ -213,7 +260,8 @@ void prepare_problem( char *addr_choice_file, int siz, struct problem_node **pre
 
 
 #if DEBUG
-            printf("2.main_addr : %s , %s, %s, %d\n\n",main_addr,__FILE__,__func__,__LINE__);
+            printf("2.main_addr : %s\n",main_addr);
+            printf("%d , %s\n%s\n\n",__LINE__,__func__,__FILE__);
 #endif // DEBUG
 
             fhproblem=fopen(main_addr,"r"); /**< don't forget closing file and test it */
@@ -233,8 +281,8 @@ void prepare_problem( char *addr_choice_file, int siz, struct problem_node **pre
 
 #if DEBUG
                 prt_problem(temp_addr->current_problem);
-                printf("%s, %s, %d\n",__FILE__,__func__,__LINE__);
-                printf("____________________________________________ : END\n");
+                printf("%d , %s\n%s\n\n",__LINE__,__func__,__FILE__);
+                printf("____________________________________________ : END\n\n");
 #endif // DEBUG
 
             } else { /**< add node to link_list if "first" is non_zero */
@@ -246,8 +294,8 @@ void prepare_problem( char *addr_choice_file, int siz, struct problem_node **pre
 
 #if DEBUG
                 prt_problem(temp_addr->current_problem);
-                printf("%s, %s, %d\n",__FILE__,__func__,__LINE__);
-                printf("____________________________________________ : END\n");
+                printf("%d , %s\n%s\n\n",__LINE__,__func__,__FILE__);
+                printf("____________________________________________ : END\n\n");
 #endif // DEBUG
             }
 
@@ -301,7 +349,7 @@ unsigned long save_game( struct gamer player){
 
 #if DEBUG
             printf("player found.\n");
-            printf("check fwrite : %d\n"
+            printf("check fwrite : %lu\n"
                    "%s , %s , %d\n",check,__FILE__,__func__,__LINE__);
 #endif //DEBUG
 
@@ -372,7 +420,6 @@ int load_game(char *username, struct gamer *player){
         }
 
     }
-    fclose(fh_load_file);
 };
 
 /** \brief play_one_step function choose a problem form link_list randomly and
@@ -383,71 +430,127 @@ int load_game(char *username, struct gamer *player){
  * \return struct_problem as next problem
  *
  */
+#if 1
+struct problem play_one_step( struct gamer *player, struct problem_node **link_list_problem,
+                              int *size_list, int choice, struct problem *last_problem){
+    double average; /**< test for win or lose. */
+    int counter;
 
- struct problem play_one_step( struct gamer *player, struct problem_node **link_list_problem,
-                               int *size_list, int choice, struct problem *last_problem){
-     double average;
-     int counter;
-     struct problem picked_problem;
-     struct problem_node *picked_node_problem = *link_list_problem
-     int rand_num;
-     time_t system_time; 
-     
-     switch (choice){
-     case 1:
-        player->court += last_problem->one.aff_court;
-        player->people += last_problem->one.aff_people;
-        player->treasury += last_problem->one.aff_treasury;
-     case 2:
-        player->court += last_problem->two.aff_court;
-        player->people += last_problem->two.aff_people;
-        player->treasury += last_problem->two.aff_treasury;
-     }
-    
-    
-     if (0 == (player->court ){
+    struct problem picked_problem; /**< it's next problem. */
+    struct problem_node *picked_node_problem = *link_list_problem; /**< it's for finding node. */
+    struct problem zero_problem = {"zero problem",{"D1",0,0,0},{"D2",0,0,0},-1}; /**< it's for starting game or
+      ending of all problems. -1 is for detect zero problem. */
+
+    double rand_num; /**< make random number between zero and size_list. */
+    time_t system_time; /**< store time of system.it use in make random number. */
+
+#if DEBUG
+    printf("\n\nDEBUGING play_one_step ================================================================\n\n");
+    printf("before effect.\n");
+    prt_problem(*last_problem);
+    printf("\nchoice = %d\n",choice);
+    prt_gamer(*player);
+    printf("LINE :%d , func : %s\n%s\n\n",__LINE__,__func__,__FILE__);
+#endif
+    //play game.affect on elements.
+    switch (choice){ /**< depends on the choice ,one of two approaches which are for last problem , affects on elements of player. */
+
+        case 1: /**< effect of first approach on elements of player. */
+            player->court += last_problem->one.aff_court;
+            player->people += last_problem->one.aff_people;
+            player->treasury += last_problem->one.aff_treasury;
+            break;
+
+        case 2: /**< effect of first approach on elements of player. */
+            player->court += last_problem->two.aff_court;
+            player->people += last_problem->two.aff_people;
+            player->treasury += last_problem->two.aff_treasury;
+            break;
+        default:
+            printf("error in choice.\n");
+    }
+#if DEBUG
+    printf("after effect.\n");
+    prt_gamer(*player);
+    printf("LINE :%d , func : %s\n%s\n\n",__LINE__,__func__,__FILE__);
+#endif
+
+    //check lose or win
+    if (0 == player->court ){ /**< check if player is loser or winner */
         player->state = 'L'; /**< Lose */
-     } 
-     else if ( 0 == player->people ) {
+    }
+    else if ( 0 == player->people ) {
         player->state = 'L'; /**< lose */
-     }
-     else if ( 0 == player->treasury ){
+    }
+    else if ( 0 == player->treasury ){
         player->state = 'L'; /**< lose */
-     }
-     average = player->court + player->people + player->treasury ;
-     average = average / 3;
-     if ( 10 > average ){
+    }
+    average = player->court + player->people + player->treasury ; /**< calculate average for checking if player is loser or winner */
+    average = average / 3;
+    if ( 10 > average ){
         player->state = 'L';
-     }
-     
-     
-     
-     
-     
-     
-     
-     
-     time(&system_time); /**< time of system */
-     srand( (unsigned)(system_time*3) ); /**< make random number with time of system */
-     rand_num = (int) 1.0*rand()/RAND_MAX;
-     rand_num = rand_num * size_list; /**< make random number between zero and size of list  */
-     
+    }
+    /**< player is winner until he can play */
+    /**< if state of player is 'L', he can't continue game. */
+
+#if DEBUG
+    printf("after evaluation.\n");
+    prt_gamer(*player);
+    printf("LINE :%d , func : %s\n%s\n\n",__LINE__,__func__,__FILE__);
+#endif
+
+
+
+    if ( 0 < size_list ){ /**< if there is any problem , chooses one of them. */
+
+        //make random number
+        time(&system_time); /**< time of system */
+        rand_num = system_time % (*size_list);
+
+#if 0
+        srand( (unsigned)(system_time*3) ); /**< make random number with time of system */
+     rand_num = 1.0*rand()/RAND_MAX;
+
      #if DEBUG
-     printf("time = %lu , rand_num = %d , size_list = %d\n",
-            system_time, rand_num, size_list);
-     printf("%d , %s\n%s\n",__LINE__,__func__,__FILE__);
-     #endif // DEBUG
-     
-     for (counter =0; counter < rand_num; counter++){
-        picked_node_problem = picked_node_problem->next_problem_node;
-     }
-     picked_problem = picked_node_problem->current_problem;
-     picked_node_problem->current_problem.probability += -1; /**< mines for elimination */
-     if ( 0 == picked_node_problem->current_problem.probability ){
-        delete_problem_node_from_list(picked_node_problem,link_list_problem);
-     }
+     printf("first rand_num = %lf\n",rand_num);
+     #endif
+     rand_num = rand_num * (*size_list); /**< make random number between zero and size of list  */
+                                         /**< rand_num chooses the problem. */
+#endif
 
- };
+#if DEBUG
+        printf("time = %lu , rand_num = %lf , size_list = %d\n",
+               system_time, rand_num, *size_list);
+        printf("LINE :%d , func : %s\n%s\n\n",__LINE__,__func__,__FILE__);
+#endif // DEBUG
 
+        // find random number
+        for (counter =0; counter < rand_num; counter++){ /**< it find problem that is chosen. */
+            picked_node_problem = picked_node_problem->next_problem_node;
+        }
+#if DEBUG
+        prt_problem(picked_node_problem->current_problem);
+        printf("\n");
+#endif
 
+        picked_node_problem->current_problem.probability += -1; /**< mines for elimination */
+        picked_problem = picked_node_problem->current_problem;
+
+        // eliminate problem if probability == 0
+        if ( 0 == picked_node_problem->current_problem.probability ){
+            delete_problem_node_from_list(picked_node_problem,link_list_problem);
+            (*size_list)--;
+        }
+
+#if DEBUG
+        prt_problem(picked_problem);
+#endif
+        return picked_problem;
+
+    }
+
+    return zero_problem;
+};
+
+#endif
 
