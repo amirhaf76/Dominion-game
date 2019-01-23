@@ -34,8 +34,10 @@ void prt_problem( struct problem);
 void prt_link_list( struct problem_node *);
 void prt_gamer( struct gamer);
 void print_all_string_array(char *, int, char *);
+int delete_problem_node_from_list(struct problem_node *, struct problem_node **);
 int show_panel( char *,char (*)[50], int, char *);
 void prepare_problem( char *, int, struct problem_node **, struct gamer);
 unsigned long save_game( struct gamer);
 int load_game( char *, struct gamer *);
+struct problem play_one_step( struct gamer *, struct problem_node **, int *, int, struct problem *);
 #endif // DOMINION_H_INCLUDED
