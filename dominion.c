@@ -5,12 +5,25 @@
 #include <string.h>
 #include <time.h>
 #define DEBUG 1
+/** \brief prt_decision function print struct decision
+ *
+ * \param temp : gets struct decision
+ * \return void
+ *
+ */
 void prt_decision(struct decision temp){
     printf("Approach : %s\n"
            "Effect on Court : %d\n"
            "Effect on People : %d\n"
            "Effect on Treasury : %d\n",temp.approach,temp.aff_court,temp.aff_people,temp.aff_treasury);
 }
+
+/** \brief prt_problem function print struct problem.
+ *
+ * \param temp : gets struct problem
+ * \return void
+ *
+ */
 void prt_problem(struct problem temp){
     printf("Problem_description : %s\n",temp.problem_description);
     prt_decision(temp.one);
@@ -18,6 +31,12 @@ void prt_problem(struct problem temp){
     printf("Probability : %d\n",temp.probability);
 
 }
+
+/** \brief prt_link_list get link list and print it.
+ *
+ * \param link : gets address of link_list. note : link_list has to be struct problem.
+ * \return void
+ */
 void prt_link_list(struct problem_node *link){
     int counter=1;
     printf("link list :\n");
@@ -29,6 +48,14 @@ void prt_link_list(struct problem_node *link){
         printf("_______________________________________ : END\n");
     }
 }
+
+/** \brief prt_gamer function get struct gamer and print it.
+ *
+ * \param player
+ * \return void
+ *
+ */
+
 void prt_gamer(struct gamer player){
     int counter;
     printf("Username : %s ------------------------------------------------------\n",player.username);
@@ -81,20 +108,20 @@ int delete_problem_node_from_list( struct problem_node *delete_problem, struct p
     struct problem_node start; /**< a struct problem_node is in stack for checking for first node of link list. */
     struct problem_node *temp_addr; /**< store address of next delete_problem to link previous it. */
     struct problem_node *after_delete_problem;
-#if DEBUG
+    #if DEBUG
     printf("Debug delete_problem_node_from_list =============================================================================\n");
     printf("%d , %s\n%s\n\n",__LINE__,__func__,__FILE__);
     int number_delete_problem = 1;
-#endif // DEBUG
+    #endif // DEBUG
 
     start.next_problem_node = *link_list; /**< add the first node of link list to next_problem of start. */
     temp_addr = &start;
 
-#if DEBUG
+    #if DEBUG
     printf("link_list at first :-------------------------------------------------------------------\n");
     prt_link_list(temp_addr->next_problem_node);
     printf("%d , %s\n%s\n\n",__LINE__,__func__,__FILE__);
-#endif // DEBUG
+    #endif // DEBUG
 
     while ( NULL != temp_addr ) { /**< work until end of link list. */
 
@@ -103,10 +130,10 @@ int delete_problem_node_from_list( struct problem_node *delete_problem, struct p
             if ( temp_addr->next_problem_node == *link_list ){ /**< if delete_problem was first node , copy new address
                 for link list. */
 
-#if DEBUG
+                #if DEBUG
                 printf("delete_problem was first problem node in list.!!!!!!!!!!!!!!!!!!!!!\n");
                 printf("%d , %s\n%s\n\n",__LINE__,__func__,__FILE__);
-#endif // DEBUG
+                #endif // DEBUG
 
                 *link_list = temp_addr->next_problem_node->next_problem_node; /**< copy new address for link list. */
             }
@@ -114,42 +141,42 @@ int delete_problem_node_from_list( struct problem_node *delete_problem, struct p
             free(temp_addr->next_problem_node); /**< free the delete_problem. */
             temp_addr->next_problem_node = after_delete_problem; /**< stick previous and next of delete_problem. */
 
-#if DEBUG
+            #if DEBUG
             printf("link_list at The END :---------------------------------------------------------------\n");
             prt_link_list(temp_addr->next_problem_node);
             printf("%d , %s\n%s\n",__LINE__,__func__,__FILE__);
             printf("____________________________________________________________________________ END DEBUGING\n"
                    "number of delete_problem = %d\n\n",number_delete_problem);
-#endif // DEBUG
+            #endif // DEBUG
 
             return 1; /**< this operation was successful. */
         }
 
-#if DEBUG
+        #if DEBUG
         number_delete_problem++;
-#endif // DEBUG
+        #endif // DEBUG
 
         temp_addr = temp_addr->next_problem_node; /**< go to next address */
     }
-#if DEBUG
+    #if DEBUG
     printf("link_list at The END :---------------------------------------------------------\n");
-    prt_link_list(temp_addr);
+    prt_link_list(temp_addr->next_problem_node);
     printf("%d , %s\n%s\n",__LINE__,__func__,__FILE__);
     printf("____________________________________________________________________________ END DEBUGING\n\n");
-#endif // DEBUG
-    return 0; /**< it was not successful.!!!!! */
+    #endif // DEBUG
+  return 0; /**< it was not successful.!!!!! */
 }
 
 /** \brief show_panel make panel with question and commands which is gave.
  *
  * \param problem description char* the address of description of problem
- * \param commands[][50] char address of array that have command
+ * \param
  * \param size int the number of commands , each command have to be 50 character
  * \param take_command char* the command that user commands
  * \return number of command.
  *
  */
-int show_panel(char *description,char commands[][50],int size, char *take_command){
+int show_panel(char *description,int size,char *commands[size], char *take_command){
     int num;
     int cnt;  /**< counter >*/
     for (cnt=0;cnt<80;++cnt) {   /**< it's for bar section> */
@@ -172,6 +199,12 @@ int show_panel(char *description,char commands[][50],int size, char *take_comman
         }
         printf("It's wrong command\n"); /**< if number is not suitable ,print a message> */
     }
+#if DEBUG
+    printf("\n\nDEBUGING show_panel ================================================== START\n"
+           "number of command = %d\n"
+           "commands = %s\n"
+           "DEBUGING show_panel ================================================== END\n",num,take_command);
+#endif // DEBUG
     return num;
 }
 
@@ -218,7 +251,7 @@ void prepare_problem( char *addr_choice_file, int siz, struct problem_node **pre
     struct problem_node *temp_addr=NULL; /**< temp_addr is just for keep address of prepared_problem for short time */
 
 #if DEBUG
-    printf("\n\nDEBUGING prepare_problem =======================================================================\n\n");
+ printf("\n\nDEBUGING prepare_problem =======================================================================\n\n");
 #endif // DEBUG
 
     FILE *fhin; /**< file handler of input */
@@ -420,6 +453,7 @@ int load_game(char *username, struct gamer *player){
         }
 
     }
+    fclose(fh_load_file);
 };
 
 /** \brief play_one_step function choose a problem form link_list randomly and
@@ -430,7 +464,8 @@ int load_game(char *username, struct gamer *player){
  * \return struct_problem as next problem
  *
  */
-#if 1
+
+
 struct problem play_one_step( struct gamer *player, struct problem_node **link_list_problem,
                               int *size_list, int choice, struct problem *last_problem){
     double average; /**< test for win or lose. */
@@ -446,11 +481,13 @@ struct problem play_one_step( struct gamer *player, struct problem_node **link_l
 
 #if DEBUG
     printf("\n\nDEBUGING play_one_step ================================================================\n\n");
-    printf("before effect.\n");
+    printf("before effect ************************************ START\n");
+    printf("last_problem :\n");
     prt_problem(*last_problem);
     printf("\nchoice = %d\n",choice);
     prt_gamer(*player);
-    printf("LINE :%d , func : %s\n%s\n\n",__LINE__,__func__,__FILE__);
+    printf("LINE :%d , func : %s\n%s\n"
+           "before effect ************************************ END\n\n",__LINE__,__func__,__FILE__);
 #endif
     //play game.affect on elements.
     switch (choice){ /**< depends on the choice ,one of two approaches which are for last problem , affects on elements of player. */
@@ -470,9 +507,10 @@ struct problem play_one_step( struct gamer *player, struct problem_node **link_l
             printf("error in choice.\n");
     }
 #if DEBUG
-    printf("after effect.\n");
+    printf("after effect ************************************ START\n");
     prt_gamer(*player);
-    printf("LINE :%d , func : %s\n%s\n\n",__LINE__,__func__,__FILE__);
+    printf("LINE :%d , func : %s\n%s\n\n"
+           "after effect ************************************ END\n\n",__LINE__,__func__,__FILE__);
 #endif
 
     //check lose or win
@@ -494,9 +532,10 @@ struct problem play_one_step( struct gamer *player, struct problem_node **link_l
     /**< if state of player is 'L', he can't continue game. */
 
 #if DEBUG
-    printf("after evaluation.\n");
+    printf("after evaluation ************************************ START\n");
     prt_gamer(*player);
-    printf("LINE :%d , func : %s\n%s\n\n",__LINE__,__func__,__FILE__);
+    printf("LINE :%d , func : %s\n%s\n\n"
+           "after evaluation ************************************ END\n\n",__LINE__,__func__,__FILE__);
 #endif
 
 
@@ -519,9 +558,11 @@ struct problem play_one_step( struct gamer *player, struct problem_node **link_l
 #endif
 
 #if DEBUG
-        printf("time = %lu , rand_num = %lf , size_list = %d\n",
+        printf("CHECKING RANDOM NUMBER ************************************ START\n"
+               "time = %lu , rand_num = %lf , size_list = %d\n",
                system_time, rand_num, *size_list);
-        printf("LINE :%d , func : %s\n%s\n\n",__LINE__,__func__,__FILE__);
+        printf("LINE :%d , func : %s\n%s\n",__LINE__,__func__,__FILE__);
+        printf("CHECKING RANDOM NUMBER ************************************END\n\n");
 #endif // DEBUG
 
         // find random number
@@ -529,28 +570,72 @@ struct problem play_one_step( struct gamer *player, struct problem_node **link_l
             picked_node_problem = picked_node_problem->next_problem_node;
         }
 #if DEBUG
+        printf("CHECKING ELIMINATION ************************************ START\n");
         prt_problem(picked_node_problem->current_problem);
-        printf("\n");
+        printf("LINE :%d , func : %s\n%s\n",__LINE__,__func__,__FILE__);
 #endif
 
         picked_node_problem->current_problem.probability += -1; /**< mines for elimination */
-        picked_problem = picked_node_problem->current_problem;
+        *last_problem = picked_node_problem->current_problem;
 
         // eliminate problem if probability == 0
         if ( 0 == picked_node_problem->current_problem.probability ){
             delete_problem_node_from_list(picked_node_problem,link_list_problem);
             (*size_list)--;
+#if DEBUG
+            printf("the problem is deleted because its probability was zero.\n");
+            printf("LINE :%d , func : %s\n%s\n\n",__LINE__,__func__,__FILE__);
+#endif
         }
 
 #if DEBUG
-        prt_problem(picked_problem);
+        prt_link_list(*link_list_problem);
+        printf("LINE :%d , func : %s\n%s\n\n",__LINE__,__func__,__FILE__);
+        printf("last_problem :\n");
+        prt_problem(*last_problem);
+        printf("CHECKING ELIMINATION ************************************ END\n\n");
 #endif
-        return picked_problem;
+
+
+    }else {
+    *last_problem = zero_problem;
+    }
+};
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+
+ int find_command(char *f_command, int size_main, char commands[][50]){
+    int counter;
+    int digit_cmd;
+    for ( counter = 0; counter < size_main; ++counter) {
+        digit_cmd = strcmp( f_command, commands[counter]);
+
+        #if DEBUG
+        printf("\n\nDUBUGING find_command============================ START \n");
+        printf("picked command = %s\n"
+               "main_command [%d] = %s\n", f_command, counter, commands[counter]);
+        #endif // DEBUG
+        if ( 0 == digit_cmd ){
+
+                #if DEBUG
+                printf("return = %d\n",counter);
+                printf("\n\nDUBUGING find_command============================ END\n\n");
+                #endif // DEBUG
+            return counter;
+        }
 
     }
+    #if DEBUG
+    printf("return = -1\n"
+           "there is not any command like picked command.\n");
+    printf("\n\nDUBUGING find_command============================ END\n\n");
+    #endif // DEBUG
+    return -1;
+}
 
-    return zero_problem;
-};
-
-#endif
 
