@@ -41,4 +41,6 @@ unsigned long save_game( struct gamer);
 int load_game( char *, struct gamer *);
 struct problem play_one_step( struct gamer *, struct problem_node **, int *, int, struct problem *);
 int find_command( char *, int,char [][50]);
+int show_saved_gamer(void);
+int load_game_num( int,struct gamer *);
 #endif // DOMINION_H_INCLUDED
