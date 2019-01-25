@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#define DEBUG 1
+#define DEBUG 0
 /** \brief prt_decision function print struct decision
  *
  * \param temp : gets struct decision
@@ -177,13 +177,16 @@ int delete_problem_node_from_list( struct problem_node *delete_problem, struct p
  *
  */
 int show_panel(char *description,int size,char *commands[size], char *take_command){
+    // prevent error because of characters
+    char delete_str[20];
+
     int num;
     int cnt;  /**< counter >*/
-    for (cnt=0;cnt<80;++cnt) {   /**< it's for bar section> */
-        printf("=");
-    }
+
+    printf("================================================================================\n"); /**< it's for bar section> */
+
     printf("\n");  /**< continue make panel >*/
-    printf("%s ?\n\n\n",description); /**< print problem description */
+    printf("%s\n\n\n",description); /**< print problem description */
 
     for (cnt=0;cnt<size;cnt++){  /**< it's for print commands>*/
         printf("[%d].%s\n",cnt+1,commands[cnt]); /**< print one more than the number of commands due to starting one> */
@@ -193,10 +196,12 @@ int show_panel(char *description,int size,char *commands[size], char *take_comma
 
     while ( 1 ) {      /**< work until a suitable number.this number is between 0 and size> */
         scanf("%d",&num); /**< give number of command>*/
+
         if ( size >= num && 0 < num){ /**< if number is suitable ,accept and copy command in tackecmd> */
             strcpy(take_command,commands[num-1]);
             break;
         }
+        gets(delete_str);
         printf("It's wrong command\n"); /**< if number is not suitable ,print a message> */
     }
 #if DEBUG
@@ -637,5 +642,115 @@ struct problem play_one_step( struct gamer *player, struct problem_node **link_l
     #endif // DEBUG
     return -1;
 }
+
+
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+int show_saved_gamer( void){
+    //store for short time
+    struct gamer player;
+
+    //check for preform correctly
+    int check;
+
+    //open file
+    FILE *fh_saved_file;
+    fh_saved_file = fopen("saved_data\\saves of game of Dominion.ds","rb+");
+    if ( NULL == fh_saved_file ){
+        printf("error in opening. Maybe there is not file with saves of game of Dominion.ds\n"
+               "LINE = %d , func = %s\n%s\n",__LINE__,__func__,__FILE__);
+    }
+
+    //read saves form file
+    int counter = 1;
+    printf("%23s |%10s |%10s |%10s\n","saves", "PEOPLE", "COURT", "TREASURY");
+    while ( 0 == feof(fh_saved_file) ){
+        check = fread ( &player, sizeof(struct gamer), 1, fh_saved_file);
+        #if 0
+        printf("check fread = %d\n"
+               "LINE = %d , func = %s\n%s\n", check, __LINE__, __func__, __FILE__);
+        #endif // DEBUG
+    if ( 0 != check ){
+    printf("%2d.%20s :%10d ,%10d ,%10d\n", counter, player.username, player.people, player.court, player.treasury);
+    }
+    counter++;
+    }
+
+    // close file for safety
+    fclose(fh_saved_file);
+
+    //calculate number of saves. counter mines -2.
+    // one for EOF and one for adding in loop
+    counter += -2;
+
+    #if 0
+    printf("counter = %d\n"
+           "LINE = %d , func = %s\n%s\n", counter,
+            __LINE__, __func__, __FILE__);
+    #endif // 1
+
+    // return number of saves
+    printf("[enter 0]--> EXIT\n"
+           "Enter number of save :\n");
+    return counter;
+
+}
+
+int load_game_num ( int num_save, struct gamer *player){
+    // for getting number of save
+    // assign -1 for entering to loop
+    int num= -1;
+
+    // prevent error because of characters
+    char delete_str[20];
+
+    // get number of save
+    while ( ( num > num_save) || ( num < 0) ){
+        scanf("%d", &num);
+        if ( ( num > num_save) || (num < 0) ){
+            gets(delete_str);
+            printf("it was wrong number.\n");
+        }
+    }
+
+    //cancel load save
+    if ( 0 == num ){
+        return 0;
+    }
+
+    //check for preform correctly
+    int check;
+
+    //open file
+    FILE *fh_saved_file;
+    fh_saved_file = fopen("saved_data\\saves of game of Dominion.ds","rb+");
+    if ( NULL == fh_saved_file ){
+        printf("error in opening. Maybe there is not file with saves of game of Dominion.ds\n"
+               "LINE = %d , func = %s\n%s\n",__LINE__,__func__,__FILE__);
+    }
+
+    //find gamer
+    fseek( fh_saved_file, (num-1)*sizeof(struct gamer), SEEK_SET);
+    check = fread ( player, sizeof(struct gamer), 1, fh_saved_file);
+
+    #if 1
+    prt_gamer(*player);
+    printf("check fread = %d\n"
+               "LINE = %d , func = %s\n%s\n", check, __LINE__, __func__, __FILE__);
+    #endif // DEBUG
+
+    //close the file for safety
+    fclose(fh_saved_file);
+
+    //return player
+    return 1;
+};
+
+
 
 
