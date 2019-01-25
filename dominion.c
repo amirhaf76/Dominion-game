@@ -5,6 +5,9 @@
 #include <string.h>
 #include <time.h>
 #define DEBUG 0
+
+
+
 /** \brief prt_decision function print struct decision
  *
  * \param temp : gets struct decision
@@ -17,6 +20,11 @@ void prt_decision(struct decision temp){
            "Effect on People : %d\n"
            "Effect on Treasury : %d\n",temp.approach,temp.aff_court,temp.aff_people,temp.aff_treasury);
 }
+
+
+
+
+
 
 /** \brief prt_problem function print struct problem.
  *
@@ -31,6 +39,11 @@ void prt_problem(struct problem temp){
     printf("Probability : %d\n",temp.probability);
 
 }
+
+
+
+
+
 
 /** \brief prt_link_list get link list and print it.
  *
@@ -48,6 +61,10 @@ void prt_link_list(struct problem_node *link){
         printf("_______________________________________ : END\n");
     }
 }
+
+
+
+
 
 /** \brief prt_gamer function get struct gamer and print it.
  *
@@ -69,6 +86,10 @@ void prt_gamer(struct gamer player){
     }
     printf("\b\b  \n___________________________________________________ END\n");
 }
+
+
+
+
 
 /** \brief print all of elements of string array.also show the '\0' and '\n'
  *
@@ -97,31 +118,33 @@ void print_all_string_array( char *arry, int size,char *name){
     printf("\b \n----------------------------------------------------------\n");
 }
 
-/** \brief
- *
- * \param
- * \param
- * \return
- *
- */
+
+
+
+
+
+
+
+
+
 int delete_problem_node_from_list( struct problem_node *delete_problem, struct problem_node **link_list){
     struct problem_node start; /**< a struct problem_node is in stack for checking for first node of link list. */
     struct problem_node *temp_addr; /**< store address of next delete_problem to link previous it. */
     struct problem_node *after_delete_problem;
-    #if DEBUG
+#if DEBUG
     printf("Debug delete_problem_node_from_list =============================================================================\n");
     printf("%d , %s\n%s\n\n",__LINE__,__func__,__FILE__);
     int number_delete_problem = 1;
-    #endif // DEBUG
+#endif // DEBUG
 
     start.next_problem_node = *link_list; /**< add the first node of link list to next_problem of start. */
     temp_addr = &start;
 
-    #if DEBUG
+#if DEBUG
     printf("link_list at first :-------------------------------------------------------------------\n");
     prt_link_list(temp_addr->next_problem_node);
     printf("%d , %s\n%s\n\n",__LINE__,__func__,__FILE__);
-    #endif // DEBUG
+#endif // DEBUG
 
     while ( NULL != temp_addr ) { /**< work until end of link list. */
 
@@ -130,10 +153,10 @@ int delete_problem_node_from_list( struct problem_node *delete_problem, struct p
             if ( temp_addr->next_problem_node == *link_list ){ /**< if delete_problem was first node , copy new address
                 for link list. */
 
-                #if DEBUG
+#if DEBUG
                 printf("delete_problem was first problem node in list.!!!!!!!!!!!!!!!!!!!!!\n");
                 printf("%d , %s\n%s\n\n",__LINE__,__func__,__FILE__);
-                #endif // DEBUG
+#endif // DEBUG
 
                 *link_list = temp_addr->next_problem_node->next_problem_node; /**< copy new address for link list. */
             }
@@ -141,31 +164,40 @@ int delete_problem_node_from_list( struct problem_node *delete_problem, struct p
             free(temp_addr->next_problem_node); /**< free the delete_problem. */
             temp_addr->next_problem_node = after_delete_problem; /**< stick previous and next of delete_problem. */
 
-            #if DEBUG
+#if DEBUG
             printf("link_list at The END :---------------------------------------------------------------\n");
             prt_link_list(temp_addr->next_problem_node);
             printf("%d , %s\n%s\n",__LINE__,__func__,__FILE__);
             printf("____________________________________________________________________________ END DEBUGING\n"
                    "number of delete_problem = %d\n\n",number_delete_problem);
-            #endif // DEBUG
+#endif // DEBUG
 
             return 1; /**< this operation was successful. */
         }
 
-        #if DEBUG
+#if DEBUG
         number_delete_problem++;
-        #endif // DEBUG
+#endif // DEBUG
 
         temp_addr = temp_addr->next_problem_node; /**< go to next address */
     }
-    #if DEBUG
+#if DEBUG
     printf("link_list at The END :---------------------------------------------------------\n");
-    prt_link_list(temp_addr->next_problem_node);
+    prt_link_list(temp_addr);
     printf("%d , %s\n%s\n",__LINE__,__func__,__FILE__);
     printf("____________________________________________________________________________ END DEBUGING\n\n");
-    #endif // DEBUG
-  return 0; /**< it was not successful.!!!!! */
+#endif // DEBUG
+    return 0; /**< it was not successful.!!!!! */
 }
+
+
+
+
+
+
+
+
+
 
 /** \brief show_panel make panel with question and commands which is gave.
  *
@@ -214,6 +246,13 @@ int show_panel(char *description,int size,char *commands[size], char *take_comma
 }
 
 
+
+
+
+
+
+
+
 /** \brief gets_problem_from_file copy a problem in a struct problem_node.
  *
  * \param gets a handler to get file.
@@ -243,6 +282,11 @@ void gets_problem_from_file( FILE *handler, struct problem_node *host,int player
 }
 
 
+
+
+
+
+
 /** \brief  this function prepare problems for showing.it depends on new game and load game.
  *
  * \param addr_file_choice is address of choice file for getting address of problem.
@@ -256,7 +300,7 @@ void prepare_problem( char *addr_choice_file, int siz, struct problem_node **pre
     struct problem_node *temp_addr=NULL; /**< temp_addr is just for keep address of prepared_problem for short time */
 
 #if DEBUG
- printf("\n\nDEBUGING prepare_problem =======================================================================\n\n");
+    printf("\n\nDEBUGING prepare_problem =======================================================================\n\n");
 #endif // DEBUG
 
     FILE *fhin; /**< file handler of input */
@@ -345,6 +389,12 @@ void prepare_problem( char *addr_choice_file, int siz, struct problem_node **pre
     fclose(fhin);
 }
 
+
+
+
+
+
+
 /** \brief save_game save information of gamer in file with "saves of game of Dominion.ds" format.
  * if the gamer was in file , new data replace it.
  *
@@ -411,72 +461,19 @@ unsigned long save_game( struct gamer player){
     return check; /**< return numbers of the bytes which write in file */
 }
 
-/** \brief load_game read information
- * of players from saved_data\saves of game of Dominion.ds file.
- *
- * \param username is address to string.it's username of player that has to found.
- * \param if there is gamer with this username in file, copy it to where player point it.
- * \return if find information of gamer return 1,other wise return 0.
- *
- */
-
-int load_game(char *username, struct gamer *player){
-
-    unsigned long check; /**< it's for checking fread function */
-    struct gamer found_player; /**< for checking player in file */
-
-    FILE * fh_load_file; /**< a file in order to get information of player */
-    fh_load_file = fopen("saved_data\\saves of game of Dominion.ds","rb"); /**< just read a binary file */
-    if ( NULL == fh_load_file ) {
-        printf("!!! There is not any saved file.\n");
-        return -1;
-    }
-
-    while ( 1 ) {
-        check = fread(&found_player, sizeof(struct gamer), 1, fh_load_file);
-
-#if DEBUG
-        printf("found_player : %s\n"
-               "username : %s\n",found_player.username,username);
-        printf("check fread : %lu\n""end of file : %d\n"
-               "%s , %s , %d\n",check,feof(fh_load_file),__FILE__,__func__,__LINE__);
-#endif // DEBUG
-
-        if ( 0 == strcmp(username,found_player.username) ) {
-            *player = found_player;
-#if DEBUG
-            printf("player found.\n");
-            printf("%d , %s\n%s\n",__LINE__,__func__,__FILE__);
-#endif // DEBUG
-            fclose(fh_load_file);
-            return 1;
-        }
-        if ( 0 != feof(fh_load_file) ) {
-            printf("There is not any save with this username : %s\n",username);
-            fclose(fh_load_file);
-            return 0;
-        }
-
-    }
-    fclose(fh_load_file);
-};
-
-/** \brief play_one_step function choose a problem form link_list randomly and
- * after decision affect on people , court , treasury and probability.
- *
- * \param
- * \param
- * \return struct_problem as next problem
- *
- */
 
 
-struct problem play_one_step( struct gamer *player, struct problem_node **link_list_problem,
-                              int *size_list, int choice, struct problem *last_problem){
+
+
+
+
+
+int play_one_step( struct gamer *player, struct problem_node **link_list_problem,
+                   int *size_list, int choice, struct problem *last_problem){
     double average; /**< test for win or lose. */
     int counter;
 
-    struct problem picked_problem; /**< it's next problem. */
+    //struct problem picked_problem; /**< it's next problem. */
     struct problem_node *picked_node_problem = *link_list_problem; /**< it's for finding node. */
     struct problem zero_problem = {"zero problem",{"D1",0,0,0},{"D2",0,0,0},-1}; /**< it's for starting game or
       ending of all problems. -1 is for detect zero problem. */
@@ -519,13 +516,13 @@ struct problem play_one_step( struct gamer *player, struct problem_node **link_l
 #endif
 
     //check lose or win
-    if (0 == player->court ){ /**< check if player is loser or winner */
+    if ( 0 >= player->court ) { /**< check if player is loser or winner */
         player->state = 'L'; /**< Lose */
     }
-    else if ( 0 == player->people ) {
+    else if ( 0 >= player->people ) {
         player->state = 'L'; /**< lose */
     }
-    else if ( 0 == player->treasury ){
+    else if ( 0 >= player->treasury ){
         player->state = 'L'; /**< lose */
     }
     average = player->court + player->people + player->treasury ; /**< calculate average for checking if player is loser or winner */
@@ -535,6 +532,18 @@ struct problem play_one_step( struct gamer *player, struct problem_node **link_l
     }
     /**< player is winner until he can play */
     /**< if state of player is 'L', he can't continue game. */
+
+
+    if ( 100 < player->court ) {
+        player->court = 100;
+    }
+    if ( 100 < player->people ) {
+        player->people = 100;
+    }
+    if ( 100 < player->treasury ){
+        player->treasury = 100;
+    }
+
 
 #if DEBUG
     printf("after evaluation ************************************ START\n");
@@ -551,7 +560,7 @@ struct problem play_one_step( struct gamer *player, struct problem_node **link_l
         time(&system_time); /**< time of system */
         rand_num = system_time % (*size_list);
 
-#if 0
+#if DEBUG
         srand( (unsigned)(system_time*3) ); /**< make random number with time of system */
      rand_num = 1.0*rand()/RAND_MAX;
 
@@ -601,62 +610,59 @@ struct problem play_one_step( struct gamer *player, struct problem_node **link_l
         printf("CHECKING ELIMINATION ************************************ END\n\n");
 #endif
 
-
-    }else {
-    *last_problem = zero_problem;
+        return 1;
+    } else {
+        *last_problem = zero_problem;
+        return 0;
     }
-};
-/** \brief
- *
- * \param
- * \param
- * \return
- *
- */
 
- int find_command(char *f_command, int size_main, char commands[][50]){
+};
+
+
+
+
+
+int find_command(char *f_command, int size_main, char commands[][50]){
     int counter;
     int digit_cmd;
     for ( counter = 0; counter < size_main; ++counter) {
         digit_cmd = strcmp( f_command, commands[counter]);
 
-        #if DEBUG
+#if DEBUG
         printf("\n\nDUBUGING find_command============================ START \n");
         printf("picked command = %s\n"
                "main_command [%d] = %s\n", f_command, counter, commands[counter]);
-        #endif // DEBUG
+#endif // DEBUG
         if ( 0 == digit_cmd ){
 
-                #if DEBUG
-                printf("return = %d\n",counter);
-                printf("\n\nDUBUGING find_command============================ END\n\n");
-                #endif // DEBUG
+#if DEBUG
+            printf("return = %d\n",counter);
+            printf("\n\nDUBUGING find_command============================ END\n\n");
+#endif // DEBUG
             return counter;
         }
 
     }
-    #if DEBUG
+#if DEBUG
     printf("return = -1\n"
            "there is not any command like picked command.\n");
     printf("\n\nDUBUGING find_command============================ END\n\n");
-    #endif // DEBUG
+#endif // DEBUG
     return -1;
 }
 
 
-/** \brief
- *
- * \param
- * \param
- * \return
- *
- */
+
+
+
+
+
 int show_saved_gamer( void){
     //store for short time
     struct gamer player;
 
     //check for preform correctly
-    int check;
+    unsigned long check;
 
     //open file
     FILE *fh_saved_file;
@@ -668,17 +674,18 @@ int show_saved_gamer( void){
 
     //read saves form file
     int counter = 1;
-    printf("%23s |%10s |%10s |%10s\n","saves", "PEOPLE", "COURT", "TREASURY");
+    printf("%23s |%10s |%10s |%10s |%6s\n","saves", "PEOPLE", "COURT", "TREASURY","STATE");
     while ( 0 == feof(fh_saved_file) ){
         check = fread ( &player, sizeof(struct gamer), 1, fh_saved_file);
-        #if 0
+#if DEBUG
         printf("check fread = %d\n"
                "LINE = %d , func = %s\n%s\n", check, __LINE__, __func__, __FILE__);
-        #endif // DEBUG
-    if ( 0 != check ){
-    printf("%2d.%20s :%10d ,%10d ,%10d\n", counter, player.username, player.people, player.court, player.treasury);
-    }
-    counter++;
+#endif // DEBUG
+        if ( 0 != check ){
+            printf("%2d.%20s :%10d ,%10d ,%10d ,%6c\n", counter, player.username, player.people,
+                   player.court, player.treasury, player.state);
+        }
+        counter++;
     }
 
     // close file for safety
@@ -688,11 +695,11 @@ int show_saved_gamer( void){
     // one for EOF and one for adding in loop
     counter += -2;
 
-    #if 0
+#if DEBUG
     printf("counter = %d\n"
            "LINE = %d , func = %s\n%s\n", counter,
             __LINE__, __func__, __FILE__);
-    #endif // 1
+#endif // 1
 
     // return number of saves
     printf("[enter 0]--> EXIT\n"
@@ -700,6 +707,17 @@ int show_saved_gamer( void){
     return counter;
 
 }
+
+
+
+
+
+
+
+
+
+
+
 
 int load_game_num ( int num_save, struct gamer *player){
     // for getting number of save
@@ -724,7 +742,7 @@ int load_game_num ( int num_save, struct gamer *player){
     }
 
     //check for preform correctly
-    int check;
+    unsigned long check;
 
     //open file
     FILE *fh_saved_file;
@@ -738,11 +756,11 @@ int load_game_num ( int num_save, struct gamer *player){
     fseek( fh_saved_file, (num-1)*sizeof(struct gamer), SEEK_SET);
     check = fread ( player, sizeof(struct gamer), 1, fh_saved_file);
 
-    #if 1
+#if DEBUG
     prt_gamer(*player);
-    printf("check fread = %d\n"
-               "LINE = %d , func = %s\n%s\n", check, __LINE__, __func__, __FILE__);
-    #endif // DEBUG
+    printf("check fread = %lu\n"
+           "LINE = %d , func = %s\n%s\n", check, __LINE__, __func__, __FILE__);
+#endif // DEBUG
 
     //close the file for safety
     fclose(fh_saved_file);
@@ -750,6 +768,44 @@ int load_game_num ( int num_save, struct gamer *player){
     //return player
     return 1;
 };
+
+
+
+
+
+
+
+
+int number_of_problem(void){
+    // counting number
+    int counter=0;
+
+
+
+    // for counting line
+    char delete_str[10];
+    // open file
+    FILE *fhin;
+    fhin = fopen("problems\\CHOICES.txt","r");
+    if ( NULL == fhin ){
+        printf("error in opening.\n"
+               "LINE = %d , func = %s\n%s\n", __LINE__, __func__, __FILE__);
+    }
+
+    while ( 0 == feof(fhin) ) {
+        fgets(delete_str, 10, fhin);
+#if DEBUG
+        print_all_string_array(delete_str,10,"delete_str");
+#endif
+        counter++;
+    }
+
+    fclose(fhin);
+
+    return counter;
+
+}
+
 
 
 
