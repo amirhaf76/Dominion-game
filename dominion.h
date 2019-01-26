@@ -28,17 +28,33 @@ struct problem_node { /**< structure for making node of problem */
     struct problem_node *next_problem_node;
 };
 
-
+// use for testing
 void prt_decision( struct decision);
 void prt_problem( struct problem);
 void prt_link_list( struct problem_node *);
 void prt_gamer( struct gamer);
 void print_all_string_array(char *, int, char *);
-int delete_problem_node_from_list(struct problem_node *, struct problem_node **);
+
+
+
+
+//showing panel and choose command
 int show_panel( char *, int, char *[], char *);
+int find_command( char *, int,char [][50]);
+
+//prepare game
+int number_of_problem( void);
 void prepare_problem( char *, int, struct problem_node **, struct gamer);
 unsigned long save_game( struct gamer);
-int load_game( char *, struct gamer *);
-struct problem play_one_step( struct gamer *, struct problem_node **, int *, int, struct problem *);
-int find_command( char *, int,char [][50]);
+int show_saved_gamer(void);
+int load_game_num( int,struct gamer *);
+
+//play game
+int delete_problem_node_from_list(struct problem_node *, struct problem_node **);
+int play_one_step( struct gamer *, struct problem_node **, int *, int, struct problem *);
+
+
+
+
+
 #endif // DOMINION_H_INCLUDED
