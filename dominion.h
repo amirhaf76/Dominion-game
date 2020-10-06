@@ -1,10 +1,17 @@
 #ifndef DOMINION_H_INCLUDED
 #define DOMINION_H_INCLUDED
+
+/* features of decision
+approach is a way to solve problem and it's string.limit of it is 200 
+how much it affect on court
+how much it affect on people
+how much it affect on people 
+*/
 struct decision {    /**< features of decision */
     char approach[200]; /**< approach is a way to solve problem and it's string.limit of it is 200 */
     int aff_court; /**< how much it affect on court */
-    int aff_people; /**< how much it affect on people */
-    int aff_treasury; /**< how much it affect on people */
+    int aff_people;
+    int aff_treasury;
 };
 
 struct problem{  /**< features of problem.each problem has two approach,one probability and problem description */
