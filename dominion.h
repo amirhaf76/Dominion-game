@@ -1,17 +1,11 @@
 #ifndef DOMINION_H_INCLUDED
 #define DOMINION_H_INCLUDED
 
-/* features of decision
-approach is a way to solve problem and it's string.limit of it is 200 
-how much it affect on court
-how much it affect on people
-how much it affect on people 
-*/
 struct decision {    /**< features of decision */
     char approach[200]; /**< approach is a way to solve problem and it's string.limit of it is 200 */
     int aff_court; /**< how much it affect on court */
-    int aff_people;
-    int aff_treasury;
+    int aff_people; /**< how much it affect on court */
+    int aff_treasury; /**< how much it affect on court */
 };
 
 struct problem{  /**< features of problem.each problem has two approach,one probability and problem description */
@@ -42,9 +36,6 @@ void prt_link_list( struct problem_node *);
 void prt_gamer( struct gamer);
 void print_all_string_array(char *, int, char *);
 
-
-
-
 //showing panel and choose command
 int show_panel( char *, int, char *[], char *);
 int find_command( char *, int,char [][50]);
@@ -59,9 +50,5 @@ int load_game_num( int,struct gamer *);
 //play game
 int delete_problem_node_from_list(struct problem_node *, struct problem_node **);
 int play_one_step( struct gamer *, struct problem_node **, int *, int, struct problem *);
-
-
-
-
 
 #endif // DOMINION_H_INCLUDED

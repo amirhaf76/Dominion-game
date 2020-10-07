@@ -1,11 +1,10 @@
 #include "Dominion.h"
-
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 #define DEBUG 0
-
 
 
 /** \brief prt_decision function print struct decision
@@ -18,13 +17,13 @@ void prt_decision(struct decision temp){
     printf("Approach : %s\n"
            "Effect on Court : %d\n"
            "Effect on People : %d\n"
-           "Effect on Treasury : %d\n",temp.approach,temp.aff_court,temp.aff_people,temp.aff_treasury);
+           "Effect on Treasury : %d\n",
+           temp.approach,
+           temp.aff_court,
+           temp.aff_people,
+           temp.aff_treasury
+           );
 }
-
-
-
-
-
 
 /** \brief prt_problem function print struct problem.
  *
@@ -39,11 +38,6 @@ void prt_problem(struct problem temp){
     printf("Probability : %d\n",temp.probability);
 
 }
-
-
-
-
-
 
 /** \brief prt_link_list get link list and print it.
  *
@@ -61,10 +55,6 @@ void prt_link_list(struct problem_node *link){
         printf("_______________________________________ : END\n");
     }
 }
-
-
-
-
 
 /** \brief prt_gamer function get struct gamer and print it.
  *
@@ -779,28 +769,33 @@ int load_game_num ( int num_save, struct gamer *player){
 int number_of_problem(void){
     // counting number
     int counter=0;
-
-
+    char cwd[PATH_MAX];
+    if (getcwd(cwd, sizeof(cwd)) != NULL) {
+        printf("Current working dir: %s\n", cwd);
+    } else {
+        perror("getcwd() error");
+        return 1;
+    }
 
     // for counting line
     char delete_str[10];
     // open file
-    FILE *fhin;
-    fhin = fopen("problems\\CHOICES.txt","r");
-    if ( NULL == fhin ){
+    FILE *fin;
+    fin = fopen("problems\\CHOICES.txt","r");
+    if ( NULL == fin ){
         printf("error in opening.\n"
-               "LINE = %d , func = %s\n%s\n", __LINE__, __func__, __FILE__);
+               "\tLINE = %d , func = %s\n\t%s\n", __LINE__, __func__, __FILE__);
     }
 
-    while ( 0 == feof(fhin) ) {
-        fgets(delete_str, 10, fhin);
+    while ( 0 == feof(fin) ) {
+        fgets(delete_str, 10, fin);
 #if DEBUG
         print_all_string_array(delete_str,10,"delete_str");
 #endif
         counter++;
     }
 
-    fclose(fhin);
+    fclose(fin);
 
     return counter;
 
