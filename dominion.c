@@ -77,10 +77,6 @@ void prt_gamer(struct gamer player){
     printf("\b\b  \n___________________________________________________ END\n");
 }
 
-
-
-
-
 /** \brief print all of elements of string array.also show the '\0' and '\n'
  *
  * \param arr is address of string array for print elements of it.
@@ -107,15 +103,6 @@ void print_all_string_array( char *arry, int size,char *name){
     }
     printf("\b \n----------------------------------------------------------\n");
 }
-
-
-
-
-
-
-
-
-
 
 int delete_problem_node_from_list( struct problem_node *delete_problem, struct problem_node **link_list){
     struct problem_node start; /**< a struct problem_node is in stack for checking for first node of link list. */
@@ -421,7 +408,7 @@ unsigned long save_game( struct gamer player){
 
         if ( 0 == strcmp(player.username,finding_gamer.username) ){  /**< if find player in file , new data replace it  */
 
-            fseek(fh_saves_file,-1*sizeof(struct gamer),
+            fseek(fh_saves_file,(long)(-1*sizeof(struct gamer)),
                   SEEK_CUR);  /**< come back size of gamer bytes ,because it pass the detected data */
             check = fwrite(&player,sizeof(struct gamer),1,fh_saves_file); /**< new data replace old data */
 
@@ -766,7 +753,7 @@ int load_game_num ( int num_save, struct gamer *player){
 
 
 
-int number_of_problem(void){
+int number_of_problem() {
     // counting number
     int counter=0;
     char cwd[PATH_MAX];
