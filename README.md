@@ -1,2 +1,3 @@
-first i make library for game with suitable function
-at last a make main program for using this function
+# Dominion Strategy Game
+
+Designed and implemented a text-based strategy game in Windows console where players progress by answering questions.
